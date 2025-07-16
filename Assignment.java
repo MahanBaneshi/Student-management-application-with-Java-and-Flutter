@@ -1,34 +1,23 @@
-import java.io.FileWriter;
-import java.io.IOException;
 import java.util.*;
 public class Assignment {
     //variables:
     private String name;
-    private String deadline;
+    private Date deadline;
     private boolean isActive;
     private Course course;
-    public FileWriter assignmentInfo;
 
     //constractors:
 
-    public Assignment(String name, Course course) throws IOException {
+    public Assignment(String name, Course course){
         this.name = name;
         this.isActive = false;
         this.course = course;
-        this.assignmentInfo = new FileWriter("D:\\University\\AP\\project\\project files\\assignments"
-                + name + ".txt", true);
-        this.assignmentInfo.write("name: "+ name + "\ncourse: " + course.getName() + "\ndeadline: " + deadline + ", active");
-        course.infoWriter.write("\nassignment: " + name + " deadline: " + deadline + ", active" );
     }
-    public Assignment(String name, String  deadline, Course course) throws IOException {
+    public Assignment(String name, Date deadline, Course course){
         this.name = name;
         this.deadline = deadline;
         this.isActive = true;
         this.course = course;
-        this.assignmentInfo = new FileWriter("D:\\University\\AP\\project\\project files\\assignments\\"
-                + name + ".txt", true);
-        assignmentInfo.write("name: "+ name + "\ncourse: " + course.getName() + "\ndeadline: " + deadline + ", active");
-
     }
 
     //gettres:
@@ -37,7 +26,7 @@ public class Assignment {
         return name;
     }
 
-    public String  getDeadline() {
+    public Date getDeadline() {
         return deadline;
     }
 
@@ -51,7 +40,7 @@ public class Assignment {
         isActive = active;
     }
 
-    public void setDeadline(String deadline) {
+    public void setDeadline(Date deadline) {
         this.deadline = deadline;
     }
 
@@ -65,7 +54,7 @@ public class Assignment {
 
     //methods:
 
-    public void changeDeadline(String newDeadline){
+    public void changeDeadline(Date newDeadline){
         this.deadline = newDeadline;
     }
 }
