@@ -1,23 +1,34 @@
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.*;
 public class Assignment {
     //variables:
     private String name;
-    private Date deadline;
+    private String deadline;
     private boolean isActive;
     private Course course;
+    public FileWriter assignmentInfo;
 
     //constractors:
 
-    public Assignment(String name, Course course){
+    public Assignment(String name, Course course) throws IOException {
         this.name = name;
         this.isActive = false;
         this.course = course;
+        this.assignmentInfo = new FileWriter("D:\\University\\AP\\project\\project files\\assignements"
+                + name + ".txt");
+        this.assignmentInfo.write("name: "+ name + "\ncourse: " + course.getName() + "\ndeadline: " + deadline + ", active");
+        course.infoWriter.write("\nassignment: " + name + " deadline: " + deadline + ", active" );
     }
-    public Assignment(String name, Date deadline, Course course){
+    public Assignment(String name, String  deadline, Course course) throws IOException {
         this.name = name;
         this.deadline = deadline;
         this.isActive = true;
         this.course = course;
+        this.assignmentInfo = new FileWriter("D:\\University\\AP\\project\\project files\\assignements\\"
+                + name + ".txt", true);
+        assignmentInfo.write("name: "+ name + "\ncourse: " + course.getName() + "\ndeadline: " + deadline + ", active");
+
     }
 
     //gettres:
@@ -26,7 +37,7 @@ public class Assignment {
         return name;
     }
 
-    public Date getDeadline() {
+    public String  getDeadline() {
         return deadline;
     }
 
@@ -40,7 +51,7 @@ public class Assignment {
         isActive = active;
     }
 
-    public void setDeadline(Date deadline) {
+    public void setDeadline(String deadline) {
         this.deadline = deadline;
     }
 
@@ -54,7 +65,7 @@ public class Assignment {
 
     //methods:
 
-    public void changeDeadline(Date newDeadline){
+    public void changeDeadline(String newDeadline){
         this.deadline = newDeadline;
     }
 }

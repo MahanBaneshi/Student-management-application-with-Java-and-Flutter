@@ -13,7 +13,8 @@ public class Student {
     private double TotalAverage;
     private double thisCourseTotalAverage;
     private String specialAdjective;
-    public FileWriter writer;
+    public FileWriter courseWriter;
+    public FileWriter infoWriter;
 
     //constractors:
     public Student(long id) throws IOException {
@@ -21,11 +22,10 @@ public class Student {
         this.courses = new ArrayList<>();
         this.grades = new ArrayList<>();
         this.coursesAndGrades = new HashMap<>();
-        try {
-            this.writer = new FileWriter("D:\\University\\AP\\project\\project files\\students\\" + id + ".txt",true);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        this.courseWriter = new FileWriter("D:\\University\\AP\\project\\project files\\students\\studentCourses\\"
+                + id + "_courses.txt",true);
+        this.infoWriter = new FileWriter("D:\\University\\AP\\project\\project files\\students\\studentInfos\\"
+                + id + "_info.txt",true);
     }
 
 
@@ -101,7 +101,7 @@ public class Student {
 
     public void addToCourse(Course course) throws IOException {
         this.courses.add(course);
-        writer.write(course.getName());
+        courseWriter.write(course.getName());
     }
     public void addGradeInCourse(Course course, double grade){
         this.coursesAndGrades.put(course, grade);

@@ -11,7 +11,8 @@ public class Course {
     private List<Assignment> assignments;
     private Date examTime;
     private int studentsCount;
-    public FileWriter writer;
+    public FileWriter infoWriter;
+    public FileWriter studentsWriter;
 
     //constractors:
 
@@ -19,7 +20,10 @@ public class Course {
         this.name = name;
         this.students = new ArrayList<>();
         this.assignments = new ArrayList<>();
-        writer = new FileWriter("D:\\University\\AP\\project\\project files\\courses\\" + name + ".txt",true);
+        this.infoWriter = new FileWriter("D:\\University\\AP\\project\\project files\\courses\\courseInformations\\"
+                + name + "_info.txt");
+        this.studentsWriter = new FileWriter("D:\\University\\AP\\project\\project files\\courses\\courseStudents\\"
+                + name + "_students.txt");
     }
     public Course(String name, Teacher teacher, int unitsOfTheCourse){
         this.name = name;
@@ -29,6 +33,7 @@ public class Course {
         this.studentsCount = 0;
         this.students = new ArrayList<>();
         this.assignments = new ArrayList<>();
+
     }
 
     //getters:
@@ -57,8 +62,8 @@ public class Course {
     public void setTeacher(Teacher teacher) {
         this.teacher = teacher;
         try {
-            writer.write("Teacher id: " + teacher.getId());
-            writer.flush();
+            infoWriter.write("Teacher id: " + teacher.getId());
+            infoWriter.flush();
         } catch (IOException e) {
             e.printStackTrace();
         }

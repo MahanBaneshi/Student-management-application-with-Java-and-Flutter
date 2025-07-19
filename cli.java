@@ -88,6 +88,7 @@ public class cli {
         System.out.println("1: Define the course");
         System.out.println("2: Student registration");
         System.out.println("3: Teacher registration");
+        System.out.println("4: Back to login page");
 
         int ans = scanner.nextInt();
         switch (ans){
@@ -99,6 +100,9 @@ public class cli {
                 break;
             case 3:
                 teacherRegis();
+                break;
+            case 4:
+                login();
                 break;
         }
     }
@@ -114,6 +118,7 @@ public class cli {
         System.out.println("1: Choose a teacher");
         System.out.println("2: Add student");
         System.out.println("3: Remove student");
+        System.out.println("4: Back");
 
         int x = scanner.nextInt();
         switch (x){
@@ -133,17 +138,20 @@ public class cli {
                 course.addStudent(student);
                 student.getCourses().add(course);
 
-                student.writer.write("\nCourse: " + course.getName());
-                student.writer.flush();
+                student.courseWriter.write("\nCourse: " + course.getName());
+                student.courseWriter.flush();
 
-                course.writer.write("\nStudent: " + student.getId());
-                course.writer.flush();
+                course.studentsWriter.write("\nStudent: " + student.getId());
+                course.studentsWriter.flush();
                 System.out.println("Done");
                 adminLogin();
                 break;
             case 3:
                 System.out.println("Please enter the student id");
                 long studentIdForRemove = scanner.nextLong();
+            case 4:
+                adminAfterLog();
+                break;
         }
     }
 
@@ -263,7 +271,7 @@ public class cli {
             fileScanner.close();
 
         } catch (FileNotFoundException e) {
-            System.out.println(e.getStackTrace());
+            System.out.println(Arrays.toString(e.getStackTrace()));
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -271,7 +279,7 @@ public class cli {
     }
 
 
-    public static void teacherAfterLog(Teacher teacher) {
+    public static void teacherAfterLog(Teacher teacher) throws IOException {
         Scanner scanner = new Scanner(System.in);
         System.out.println("What are you going to do?");
         System.out.println("1: Complete the profile");
@@ -283,6 +291,7 @@ public class cli {
         System.out.println("7: Add assignment to course");
         System.out.println("8: Remove assignment to course");
         System.out.println("9: Grade student in course");
+        System.out.println("10: Back to login page");
         int ans = scanner.nextInt();
         switch (ans){
             case 1:
@@ -312,36 +321,50 @@ public class cli {
             case 9:
                 teacherGradeStudent(teacher);
                 break;
+            case 10:
+                login();
         }
     }
-    public static void teacherCompleteProf(Teacher teacher) {
+    public static void teacherCompleteProf(Teacher teacher) throws IOException {
         Scanner scanner = new Scanner(System.in);
-        System.out.println("Please enter your name");
+        System.out.println("Please enter your first name");
         System.out.print("Firstname: ");
         String teacherFirstName = scanner.next();
 
+        System.out.println("Please enter your last name");
         System.out.print("Lastname: ");
         String teacherLastName = scanner.next();
 
+        FileWriter teacherFile = new FileWriter("D:\\University\\AP\\project\\project files\\teachers\\"
+        + teacher.getId() + ".txt" , true);
+
         teacher.setFirstName(teacherFirstName);
+        teacherFile.write("\nfirstname: " + teacher.getFirstName());
         teacher.setLastName(teacherLastName);
+        teacherFile.write("\nlastname: " + teacher.getLastName());
+        teacherFile.close();
         System.out.println("done successfully");
         teacherAfterLog(teacher);
     }
-    public static void teacherViewProf(Teacher teacher) {
-        System.out.print("Your firstname: ");
-        if (teacher.getFirstName() != null){
-            System.out.println(teacher.getFirstName());
+    public static void teacherViewProf(Teacher teacher) throws IOException {
+        String filePath = "D:\\University\\AP\\project\\project files\\teachers\\" + teacher.getId() + ".txt";
+        try {
+            File file = new File(filePath);
+            Scanner reader = new Scanner(file);
+            String firstName = reader.nextLine().split(": ")[1];
+            String lastName = reader.nextLine().split(": ")[1];
+            System.out.println("First Name: " + firstName);
+            System.out.println("Last Name: " + lastName);
+            System.out.println("ID: " + teacher.getId());
+            reader.close();
+        } catch (FileNotFoundException e) {
+            System.out.println("An error occurred while reading the file");
+            e.printStackTrace();
         }
-        else{
-            System.out.println("");
-        }
-        System.out.println("Your Lastname: " + teacher.getLastName());
-        System.out.println("Your id: "+ teacher.getId());
-        teacherAfterLog(teacher);
+
     }
 
-    public static void teacherViewCourses(Teacher teacher) {
+    public static void teacherViewCourses(Teacher teacher) throws IOException {
         File teacherFile = new File("D:\\University\\AP\\project\\project files\\teachers\\" + teacher.getId() + ".txt");
 
         try {
@@ -368,16 +391,20 @@ public class cli {
         System.out.println("Please enter the course name:");
         String courseName = scanner.nextLine();
 
-        File courseFile = new File("D:\\University\\AP\\project\\project files\\courses\\" + courseName + ".txt");
+        File courseInfoFile = new File("D:\\University\\AP\\project\\project files\\courses\\courseInformations\\"
+                + courseName + "_info.txt");
         File teacherFile = new File("D:\\University\\AP\\project\\project files\\teachers\\" + teacher.getId() + ".txt");
+        File courseStuFile = new File("D:\\University\\AP\\project\\project files\\courses\\courseStudents\\"
+                + courseName + "_students.txt");
 
         try {
 
-            if (!courseFile.exists()) {
-                courseFile.createNewFile();
+            if (!courseInfoFile.exists()) {
+                courseInfoFile.createNewFile();
+                courseStuFile.createNewFile();
             }
 
-            FileWriter courseWriter = new FileWriter(courseFile);
+            FileWriter courseWriter = new FileWriter(courseInfoFile);
             courseWriter.write("Teacher ID: " + teacher.getId() + "\n");
             courseWriter.close();
 
@@ -397,34 +424,40 @@ public class cli {
         }
     }
 
-    public static void teacherAddStudent(Teacher teacher) {
+    public static void teacherAddStudent(Teacher teacher) throws IOException {
         Scanner scanner = new Scanner(System.in);
         System.out.println("Please enter the student ID:");
         System.out.print("student id: ");
         String studentId = scanner.nextLine();
         System.out.println("Please enter the course name:");
-        System.out.println("course name: ");
+        System.out.print("course name: ");
         String courseName = scanner.nextLine();
 
-        File studentFile = new File("D:\\University\\AP\\project\\project files\\students\\" + studentId + ".txt");
-        File courseFile = new File("D:\\University\\AP\\project\\project files\\courses\\" + courseName + ".txt");
+        File studentCourseFile = new File("D:\\University\\AP\\project\\project files\\students\\studentCourses\\"
+                + studentId + "_courses.txt");
+        File studentInfoFile = new File("D:\\University\\AP\\project\\project files\\students\\studentInfos"
+                + studentId + "_info.txt");
+        File courseStuFile = new File("D:\\University\\AP\\project\\project files\\courses\\courseStudents\\"
+                + courseName + "_students.txt");
 
         try {
-            if (!studentFile.exists()) {
+            if (!studentCourseFile.exists()) {
                 System.out.println("This student does not exist.");
+                teacherAfterLog(teacher);
                 return;
             }
 
-            if (!courseFile.exists()) {
+            if (!courseStuFile.exists()) {
                 System.out.println("This course does not exist.");
+                teacherAfterLog(teacher);
                 return;
             }
 
-            FileWriter studentWriter = new FileWriter(studentFile, true);
-            studentWriter.write("Course: " + courseName + "\n");
+            FileWriter studentWriter = new FileWriter(studentCourseFile, true);
+            studentWriter.write("\n" + "Course: " + courseName);
             studentWriter.close();
 
-            FileWriter courseWriter = new FileWriter(courseFile, true);
+            FileWriter courseWriter = new FileWriter(courseStuFile, true);
             courseWriter.write("Student ID: " + studentId + "\n");
             courseWriter.close();
 
@@ -436,16 +469,17 @@ public class cli {
         }
     }
 
-    public static void teacherRemoveStudent(Teacher teacher) {
+    public static void teacherRemoveStudent(Teacher teacher) throws IOException {
         Scanner scanner = new Scanner(System.in);
         System.out.println("Please enter the student id:");
-        System.out.println("stusent id: ");
+        System.out.print("stusent id: ");
         String studentId = scanner.next();
         System.out.println("Please enter the course name:");
-        System.out.println("course name: ");
+        System.out.print("course name: ");
         String courseName = scanner.next();
 
-        File teacherFile = new File("D:\\University\\AP\\project\\project files\\teachers\\" + teacher.getId() + ".txt");
+        File teacherFile = new File("D:\\University\\AP\\project\\project files\\teachers\\"
+                + teacher.getId() + ".txt");
         try (BufferedReader reader = new BufferedReader(new FileReader(teacherFile))) {
             String line;
             while ((line = reader.readLine()) != null) {
@@ -472,8 +506,10 @@ public class cli {
                         }
                     }
 
-                    File oldFile = new File("D:\\University\\AP\\project\\project files\\students\\" + studentId + ".txt");
-                    File newFile = new File("D:\\University\\AP\\project\\project files\\students\\new.txt");
+                    File oldFile = new File("D:\\University\\AP\\project\\project files\\students\\studentCourses\\"
+                            + studentId + "_courses.txt");
+                    File newFile = new File("D:\\University\\AP\\project\\project files\\students\\studentCourses\\"
+                            + "new.txt");
 
                     BufferedReader studentReader = new BufferedReader(new FileReader(oldFile));
                     BufferedWriter writer = new BufferedWriter(new FileWriter(newFile));
@@ -490,8 +526,11 @@ public class cli {
                     oldFile.delete();
                     newFile.renameTo(oldFile);
 
-                    oldFile = new File("D:\\University\\AP\\project\\project files\\courses\\" + courseName + ".txt");
-                    newFile = new File("D:\\University\\AP\\project\\project files\\courses\\temp.txt");
+                    oldFile = new File("D:\\University\\AP\\project\\project files\\courses\\courseStudents\\"
+                            + courseName + "_students.txt");
+                    newFile = new File("D:\\University\\AP\\project\\project files\\courses\\courseStudents\\"
+                            + "temp.txt");
+
 
                     studentReader = new BufferedReader(new FileReader(oldFile));
                     writer = new BufferedWriter(new FileWriter(newFile));
@@ -517,22 +556,17 @@ public class cli {
     }
 
     public static void teacherAddAssignment(Teacher teacher) {
-    }
-
-    public static void teacherRemoveAssignment(Teacher teacher) {
-    }
-
-    public static void teacherGradeStudent(Teacher teacher) {
         Scanner scanner = new Scanner(System.in);
-        System.out.println("Please enter the student id:");
-        String studentId = scanner.next();
+        System.out.println("Please enter the assignment name:");
+        String assignmentName = scanner.next();
         System.out.println("Please enter the course name:");
         String courseName = scanner.next();
-        System.out.println("Please enter the grade:");
-        String grade = scanner.next();
+        System.out.println("Please enter the deadline:");
+        String deadline = scanner.next();
 
         // Check if the teacher is the teacher of the course
-        File teacherFile = new File("D:\\University\\AP\\project\\project files\\teachers\\" + teacher.getId() + ".txt");
+        File teacherFile = new File("D:\\University\\AP\\project\\project files\\teachers\\"
+                + teacher.getId() + ".txt");
         try (BufferedReader reader = new BufferedReader(new FileReader(teacherFile))) {
             String line;
             boolean teacherHasCourse = false;
@@ -551,8 +585,148 @@ public class cli {
             e.printStackTrace();
         }
 
-        // Check if the student is in the course
-        File courseFile = new File("D:\\University\\AP\\project\\project files\\courses\\" + courseName + ".txt");
+        // If the teacher has the course, create a new assignment and add it to the course
+        try {
+            Course course = new Course(courseName);
+            Assignment assignment = new Assignment(assignmentName, deadline, course);
+            course.getAssignments().add(assignment);
+
+            // Write the assignment's name and deadline to the course's file
+            FileWriter courseWriter =
+                    new FileWriter("D:\\University\\AP\\project\\project files\\courses\\courseInformations\\"
+                    + courseName + "_info.txt", true);
+            courseWriter.write("\nAssignment: " + assignmentName + ", Deadline: " + deadline + "Active");
+            courseWriter.close();
+
+            // Write the assignment's details to the assignment's file
+            FileWriter assignmentWriter = new FileWriter("D:\\University\\AP\\project\\project files\\assignments\\"
+                    + assignmentName + ".txt", true);
+            assignmentWriter.write("Name: " + assignmentName + "\nCourse: " + courseName + "\nActive");
+            assignmentWriter.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void teacherRemoveAssignment(Teacher teacher) {
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("Please enter the course name:");
+        String courseName = scanner.next();
+        System.out.println("Please enter the assignment name:");
+        String assignmentName = scanner.next();
+
+        // Check if the teacher is the teacher of the course
+        File teacherFile = new File("D:\\University\\AP\\project\\project files\\teachers\\" + teacher.getId() + ".txt");
+        try (BufferedReader reader = new BufferedReader(new FileReader(teacherFile))) {
+            String line;
+            boolean teacherHasCourse = false;
+            while ((line = reader.readLine()) != null) {
+                if (line.equals("Course: " + courseName)) {
+                    teacherHasCourse = true;
+                    break;
+                }
+            }
+            if (!teacherHasCourse) {
+                System.out.println("The teacher does not teach this course.");
+                return;
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        // Check if the assignment is in the course
+        File courseFile = new File("D:\\University\\AP\\project\\project files\\courses\\courseInformations\\"
+                + courseName + "_info.txt");
+        try (BufferedReader reader = new BufferedReader(new FileReader(courseFile))) {
+            String line;
+            boolean courseHasAssignment = false;
+            while ((line = reader.readLine()) != null) {
+                if (line.startsWith("Assignment: " + assignmentName)) {
+                    courseHasAssignment = true;
+                    break;
+                }
+            }
+            if (!courseHasAssignment) {
+                System.out.println("The assignment is not in this course.");
+                return;
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        // If the teacher has the course and the assignment is in the course, deactivate the assignment
+        try {
+            // Deactivate the assignment in the assignment's file
+            File assignmentFile = new File("D:\\University\\AP\\project\\project files\\assignments\\"
+                    + assignmentName + ".txt");
+            BufferedReader reader = new BufferedReader(new FileReader(assignmentFile));
+            BufferedWriter writer =
+                    new BufferedWriter(new FileWriter("D:\\University\\AP\\project\\project files\\assignments\\temp.txt"));
+
+            String line;
+            while ((line = reader.readLine()) != null) {
+                if (line.startsWith("Active")) {
+                    line = "Active: false";
+                }
+                writer.write(line + System.lineSeparator());
+            }
+            writer.close();
+            reader.close();
+            assignmentFile.delete();
+            new File("D:\\University\\AP\\project\\project files\\assignments\\temp.txt").renameTo(assignmentFile);
+
+            // Deactivate the assignment in the course's file
+            reader = new BufferedReader(new FileReader(courseFile));
+            writer = new BufferedWriter(new FileWriter("D:\\University\\AP\\project\\project files\\courses\\courseInformations\\temp.txt"));
+
+            while ((line = reader.readLine()) != null) {
+                if (line.startsWith("Assignment: " + assignmentName)) {
+                    line += ", Active: false";
+                }
+                writer.write(line + System.lineSeparator());
+            }
+            writer.close();
+            reader.close();
+            courseFile.delete();
+            new File("D:\\University\\AP\\project\\project files\\courses\\courseInformations\\temp.txt").renameTo(courseFile);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void teacherGradeStudent(Teacher teacher) throws IOException {
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("Please enter the student id:");
+        String studentId = scanner.next();
+        System.out.println("Please enter the course name:");
+        String courseName = scanner.next();
+        System.out.println("Please enter the grade:");
+        String grade = scanner.next();
+
+        // Check if the teacher is the teacher of the course
+        File teacherFile = new File("D:\\University\\AP\\project\\project files\\teachers\\"
+                + teacher.getId() + ".txt");
+        try (BufferedReader reader = new BufferedReader(new FileReader(teacherFile))) {
+            String line;
+            boolean teacherHasCourse = false;
+            while ((line = reader.readLine()) != null) {
+                if (line.equals("Course: " + courseName)) {
+                    teacherHasCourse = true;
+                    break;
+                }
+            }
+            if (!teacherHasCourse) {
+                System.out.println("The teacher does not teach this course.");
+                teacherAfterLog(teacher);
+                return;
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+
+        File courseFile = new File("D:\\University\\AP\\project\\project files\\courses\\courseStudents\\"
+                + courseName + "_students.txt");
         try (BufferedReader reader = new BufferedReader(new FileReader(courseFile))) {
             String line;
             boolean courseHasStudent = false;
@@ -573,8 +747,10 @@ public class cli {
 
         // Add the grade to the course's file
         try {
-            File inputFile = new File("D:\\University\\AP\\project\\project files\\courses\\" + courseName + ".txt");
-            File tempFile = new File("D:\\University\\AP\\project\\project files\\courses\\temp.txt");
+            File inputFile = new File("D:\\University\\AP\\project\\project files\\courses\\courseStudents\\"
+                    + courseName + "_students.txt");
+            File tempFile = new File("D:\\University\\AP\\project\\project files\\courses\\courseStudents\\"
+                    + "temp.txt");
 
             BufferedReader reader = new BufferedReader(new FileReader(inputFile));
             BufferedWriter writer = new BufferedWriter(new FileWriter(tempFile));
@@ -586,7 +762,7 @@ public class cli {
                 if(currentLine.equals(lineToReplace)) {
                     currentLine += ", grade: " + grade;
                 }
-                writer.write(currentLine + System.getProperty("line.separator"));
+                writer.write(currentLine + System.lineSeparator());
             }
             writer.close();
             reader.close();
@@ -596,10 +772,12 @@ public class cli {
             e.printStackTrace();
         }
 
-        // Add the grade to the student's file
+
         try {
-            File inputFile = new File("D:\\University\\AP\\project\\project files\\students\\" + studentId + ".txt");
-            File tempFile = new File("D:\\University\\AP\\project\\project files\\students\\temp.txt");
+            File inputFile = new File("D:\\University\\AP\\project\\project files\\students\\studentCourses\\"
+                    + studentId + "_courses.txt");
+            File tempFile = new File("D:\\University\\AP\\project\\project files\\students\\studentCourses\\"
+                    + "temp.txt");
 
             BufferedReader reader = new BufferedReader(new FileReader(inputFile));
             BufferedWriter writer = new BufferedWriter(new FileWriter(tempFile));
@@ -611,7 +789,7 @@ public class cli {
                 if(currentLine.equals(lineToReplace)) {
                     currentLine += ", grade: " + grade;
                 }
-                writer.write(currentLine + System.getProperty("line.separator"));
+                writer.write(currentLine + System.lineSeparator());
             }
             writer.close();
             reader.close();
@@ -620,6 +798,7 @@ public class cli {
         } catch (IOException e) {
             e.printStackTrace();
         }
+        teacherAfterLog(teacher);
     }
 
     public static void studentLogin () {
@@ -698,7 +877,6 @@ public class cli {
             case 6:
                 login();
                 break;
-
         }
 
     }
@@ -721,7 +899,8 @@ public class cli {
 
     public static void studentViewCourses(Student student) {
         try {
-            File file = new File("D:\\University\\AP\\project\\project files\\students\\" + student.getId() + ".txt");
+            File file = new File("D:\\University\\AP\\project\\project files\\students\\studentCourses\\"
+                    + student.getId() + "_courses.txt");
             BufferedReader reader = new BufferedReader(new FileReader(file));
 
             String line;
@@ -747,7 +926,7 @@ public class cli {
         System.out.println("Please enter the course name to add:");
         String courseName = scanner.next();
 
-        // Add the course to the student's courses
+
         Course courseToAdd = null;
         for (Course course : student.getCourses()) {
             if (course.getName().equals(courseName)) {
@@ -761,7 +940,8 @@ public class cli {
         }
 
         try {
-            FileWriter writer = new FileWriter("D:\\University\\AP\\project\\project files\\students\\" + student.getId() + ".txt", true);
+            FileWriter writer = new FileWriter("D:\\University\\AP\\project\\project files\\students\\studentCourses\\"
+                    + student.getId() + "_courses.txt", true);
             writer.write("\nCourse: " + courseName);
             writer.close();
         } catch (IOException e) {
@@ -770,7 +950,8 @@ public class cli {
 
 
         try {
-            FileWriter writer = new FileWriter("D:\\University\\AP\\project\\project files\\courses\\" + courseName + ".txt", true);
+            FileWriter writer = new FileWriter("D:\\University\\AP\\project\\project files\\courses\\courseStudents\\"
+                    + courseName + "_students.txt", true);
             writer.write("\nStudent: " + student.getId());
             writer.close();
         } catch (IOException e) {
@@ -833,7 +1014,8 @@ public class cli {
             password = scanner.next();
         }
         try {
-            FileWriter writer = new FileWriter("D:\\University\\AP\\project\\project files\\Teacher info.txt", true);
+            FileWriter writer = new FileWriter("D:\\University\\AP\\project\\project files\\Teacher "
+                    + "info.txt", true);
             writer.write("Username: " + username + ", Password: " + password + "\n");
             writer.close();
         } catch (IOException e) {
@@ -885,12 +1067,7 @@ public class cli {
     }
 
     public static boolean usernameValidator(long username){
-        if (username >= 100000000 && username <= 999999999){
-            return true;
-        }
-        else {
-            return false;
-        }
+        return username >= 100000000 && username <= 999999999;
     }
     public static boolean passwordValidator(String password){
         if (password.length() < 8) {

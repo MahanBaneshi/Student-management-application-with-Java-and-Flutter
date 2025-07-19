@@ -9,7 +9,8 @@ public class Teacher {
     private List<Course> courses;
     private long id;
     private String password;
-    public FileWriter teacherFile;
+    public FileWriter teacherInfo;
+    public FileWriter teacherCourses;
 
 
     //constractors:
@@ -17,7 +18,8 @@ public class Teacher {
     public Teacher(long id) throws IOException {
         this.id = id;
         this.courses = new ArrayList<>();
-        teacherFile = new FileWriter("D:\\University\\AP\\project\\project files\\teachers\\" + id + ".txt",true);
+        teacherInfo = new FileWriter("D:\\University\\AP\\project\\project files\\teachers\\"
+                + id + ".txt",true);
     }
 
     public Teacher(String firstName, String lastName){
@@ -60,11 +62,11 @@ public class Teacher {
         this.courses = courses;
     }
 
-    public void setFirstName(String firstName) {
+    public void setFirstName(String firstName) throws IOException {
         this.firstName = firstName;
     }
 
-    public void setLastName(String lastName) {
+    public void setLastName(String lastName) throws IOException {
         this.lastName = lastName;
     }
     //methods:
@@ -72,9 +74,9 @@ public class Teacher {
     public void addCourse(Course course) throws IOException {
         if (!this.courses.contains(course)) {
             courses.add(course);
-            teacherFile.write("Course: " + course.getName() + "\n");
-            teacherFile.flush();
-            course.writer.write(this.getId() + " \n");
+            teacherInfo.write("Course: " + course.getName() + "\n");
+            teacherInfo.flush();
+            course.infoWriter.write(this.getId() + " \n");
 
         } else {
             System.out.println("This lesson has already been added to the list.");
