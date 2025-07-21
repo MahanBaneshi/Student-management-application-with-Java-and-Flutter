@@ -21,9 +21,9 @@ public class Course {
         this.students = new ArrayList<>();
         this.assignments = new ArrayList<>();
         this.infoWriter = new FileWriter("D:\\University\\AP\\project\\project files\\courses\\courseInformations\\"
-                + name + "_info.txt");
+                + name + "_info.txt", true);
         this.studentsWriter = new FileWriter("D:\\University\\AP\\project\\project files\\courses\\courseStudents\\"
-                + name + "_students.txt");
+                + name + "_students.txt", true);
     }
     public Course(String name, Teacher teacher, int unitsOfTheCourse){
         this.name = name;
@@ -62,7 +62,7 @@ public class Course {
     public void setTeacher(Teacher teacher) {
         this.teacher = teacher;
         try {
-            infoWriter.write("Teacher id: " + teacher.getId());
+            infoWriter.write("Teacher ID: " + teacher.getId() + "\n");
             infoWriter.flush();
         } catch (IOException e) {
             e.printStackTrace();

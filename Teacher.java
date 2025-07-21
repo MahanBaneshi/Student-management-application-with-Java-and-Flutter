@@ -18,8 +18,10 @@ public class Teacher {
     public Teacher(long id) throws IOException {
         this.id = id;
         this.courses = new ArrayList<>();
-        teacherInfo = new FileWriter("D:\\University\\AP\\project\\project files\\teachers\\"
-                + id + ".txt",true);
+        teacherInfo = new FileWriter("D:\\University\\AP\\project\\project files\\teachers\\teacherInfo\\"
+                + id + "_info.txt",true);
+        teacherCourses = new FileWriter("D:\\University\\AP\\project\\project files\\teachers\\teacherCourses\\"
+                + id + "_courses.txt" , true);
     }
 
     public Teacher(String firstName, String lastName){
@@ -74,8 +76,8 @@ public class Teacher {
     public void addCourse(Course course) throws IOException {
         if (!this.courses.contains(course)) {
             courses.add(course);
-            teacherInfo.write("Course: " + course.getName() + "\n");
-            teacherInfo.flush();
+            teacherCourses.write("Course: " + course.getName() + "\n");
+            teacherCourses.flush();
             course.infoWriter.write(this.getId() + " \n");
 
         } else {

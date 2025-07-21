@@ -15,8 +15,8 @@ public class Assignment {
         this.name = name;
         this.isActive = false;
         this.course = course;
-        this.assignmentInfo = new FileWriter("D:\\University\\AP\\project\\project files\\assignements"
-                + name + ".txt");
+        this.assignmentInfo = new FileWriter("D:\\University\\AP\\project\\project files\\assignments"
+                + name + ".txt", true);
         this.assignmentInfo.write("name: "+ name + "\ncourse: " + course.getName() + "\ndeadline: " + deadline + ", active");
         course.infoWriter.write("\nassignment: " + name + " deadline: " + deadline + ", active" );
     }
@@ -25,7 +25,7 @@ public class Assignment {
         this.deadline = deadline;
         this.isActive = true;
         this.course = course;
-        this.assignmentInfo = new FileWriter("D:\\University\\AP\\project\\project files\\assignements\\"
+        this.assignmentInfo = new FileWriter("D:\\University\\AP\\project\\project files\\assignments\\"
                 + name + ".txt", true);
         assignmentInfo.write("name: "+ name + "\ncourse: " + course.getName() + "\ndeadline: " + deadline + ", active");
 
