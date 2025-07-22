@@ -10,15 +10,11 @@ import java.util.Scanner;
 public class cli { //Based on working with text files
 
     public static void main(String[] args) throws IOException {
-        System.out.print("\033[H\033[2J");
-        System.out.flush();
         System.out.println("Hello! welcome to Sbu!!");
         login();
     }
 //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     public static void login() throws IOException {
-        System.out.print("\033[H\033[2J");
-        System.out.flush();
         System.out.println("Please specify your role");
         System.out.println("1: student");
         System.out.println("2: teacher");
@@ -51,8 +47,6 @@ public class cli { //Based on working with text files
         //In this method, we check the validity of the entered username and password for the admin
         //For admin, we have only one username and password
         //That specification is stored in a text file
-        System.out.print("\033[H\033[2J");
-        System.out.flush();
 
         System.out.println("Here is admin login");
         Scanner scanner = new Scanner(System.in);
@@ -98,12 +92,10 @@ public class cli { //Based on working with text files
         }
     }
 
-    //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
     public static void adminAfterLog() throws IOException {
         //In this method, we show the tasks that the admin can do
-        System.out.print("\033[H\033[2J");
-        System.out.flush();
 
         Scanner scanner = new Scanner(System.in);
         System.out.println("What are you going to do?");
@@ -163,16 +155,10 @@ public class cli { //Based on working with text files
         Each course that is born as an object creates two files.
         One for maintaining the students of that course and the other for maintaining other details
          */
-        //System.out.print("\033[H\033[2J");
-        //System.out.flush();
-
         Scanner scanner = new Scanner(System.in);
         System.out.println("Please print the course name");
         String courseName = scanner.next();
         Course course = new Course(courseName);
-
-        System.out.print("\033[H\033[2J");
-        System.out.flush();
 
         System.out.println("What do you want to do with this course?");
         System.out.println("1: Choose a teacher");
@@ -185,9 +171,6 @@ public class cli { //Based on working with text files
             case 1:
                 // Both the teacher ID is written in the course file and the course name is written in the teacher file
                 // These two tasks are done in the methods of teacher and course classes
-                System.out.print("\033[H\033[2J");
-                System.out.flush();
-                
                 System.out.println("Please enter the teacher id");
                 long teacherId = scanner.nextLong();
                 Teacher teacher = new Teacher(teacherId);
@@ -197,10 +180,6 @@ public class cli { //Based on working with text files
                 adminAfterLog();
                 break;
             case 2:
-
-                System.out.print("\033[H\033[2J");
-                System.out.flush();
-
                 // Both the student ID is written in the course file and the course name is written in the student file
                 System.out.println("Please enter the student id");
                 long studentIdForAdd = scanner.nextLong();
@@ -217,10 +196,6 @@ public class cli { //Based on working with text files
                 adminLogin();
                 break;
             case 3:
-
-                System.out.print("\033[H\033[2J");
-                System.out.flush();
-
                 System.out.println("Please enter the number of units");
                 int unitsNum = scanner.nextInt();
                 course.infoWriter.write("number of the units: " + unitsNum + "\n");
@@ -339,9 +314,6 @@ public class cli { //Based on working with text files
     public static void studentRegis() throws IOException {
         //In this method, the administrator defines a new student
 
-        System.out.print("\033[H\033[2J");
-        System.out.flush();
-
         Scanner scanner = new Scanner(System.in);
         System.out.println("Please enter the student id:");
         System.out.print("student id: ");
@@ -386,10 +358,6 @@ public class cli { //Based on working with text files
     //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
     public static void deleteStudent() throws IOException {
-
-        System.out.print("\033[H\033[2J");
-        System.out.flush();    
-
         Scanner scanner = new Scanner(System.in);
         System.out.println("Please enter the student ID:");
         String studentId = scanner.nextLine();
@@ -443,9 +411,6 @@ public class cli { //Based on working with text files
     public static void teacherRegis() throws IOException {
         //In this method, the administrator defines a new teacher
 
-        System.out.print("\033[H\033[2J");
-        System.out.flush();
-
         Scanner scanner = new Scanner(System.in);
         System.out.println("Please enter the teacher id:");
         System.out.print("teacher id: ");
@@ -487,10 +452,6 @@ public class cli { //Based on working with text files
     }
 
     public static void deleteTeacher() throws IOException {
-
-        System.out.print("\033[H\033[2J");
-        System.out.flush();
-
         Scanner scanner = new Scanner(System.in);
         System.out.println("Please enter the teacher ID:");
         String teacherId = scanner.nextLine();
@@ -543,10 +504,6 @@ public class cli { //Based on working with text files
     //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
     public static void teacherLogin () {
-
-        System.out.print("\033[H\033[2J");
-        System.out.flush();
-
         //In this method, professors enter the application by entering valid ID and password.
         //Username and password must match what is in the database
 
@@ -601,10 +558,6 @@ public class cli { //Based on working with text files
     //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
     public static void teacherAfterLog(Teacher teacher) throws IOException {
-
-       // System.out.print("\033[H\033[2J");
-       // System.out.flush();
-
         //This method displays what the master can do
         /*
         With the birth of each teacher as an object, two text files are created.
@@ -664,10 +617,6 @@ public class cli { //Based on working with text files
     //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
     public static void teacherCompleteProf(Teacher teacher) throws IOException {
-
-        System.out.print("\033[H\033[2J");
-        System.out.flush();
-
         // Here the professor can complete his personal information
         // This information is stored in the teacher's file
         Scanner scanner = new Scanner(System.in);
@@ -694,10 +643,6 @@ public class cli { //Based on working with text files
     //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
     public static void teacherViewProf(Teacher teacher) throws IOException {
-
-        System.out.print("\033[H\033[2J");
-        System.out.flush();
-
         // This is done by reading the teacher file
         String filePath = "D:\\University\\AP\\project\\project files\\teachers\\teacherInfo\\"
                 + teacher.getId() + "_info.txt";
@@ -714,17 +659,13 @@ public class cli { //Based on working with text files
             System.out.println("An error occurred while reading the file");
             e.printStackTrace();
         }
-        
+        System.out.println("done successfully");
         teacherAfterLog(teacher);
     }
 
     //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
     public static void teacherViewCourses(Teacher teacher) throws IOException {
-
-        System.out.print("\033[H\033[2J");
-        System.out.flush();
-        
         // Here the professor can see the courses he is the professor of
         // This is done by reading the teacher file
         File teacherFile = new File("D:\\University\\AP\\project\\project files\\teachers\\teacherCourses\\"
@@ -751,10 +692,6 @@ public class cli { //Based on working with text files
     //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
     public static void teacherAddCourse(Teacher teacher) {
-
-        System.out.print("\033[H\033[2J");
-        System.out.flush();
-
         //Here the teacher can take a new course
         Scanner scanner = new Scanner(System.in);
         System.out.println("Please enter the course name:");
@@ -800,10 +737,6 @@ public class cli { //Based on working with text files
     //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
     public static void teacherAddStudent(Teacher teacher) throws IOException {
-
-        System.out.print("\033[H\033[2J");
-        System.out.flush();
-
         //Here the professor can add students to the course he has taken
         Scanner scanner = new Scanner(System.in);
         System.out.println("Please enter the student ID:");
@@ -854,10 +787,6 @@ public class cli { //Based on working with text files
     //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
     public static void teacherRemoveStudent(Teacher teacher) throws IOException {
-
-        System.out.print("\033[H\033[2J");
-        System.out.flush();
-
         //In this method, the professor can remove a student from his course
         Scanner scanner = new Scanner(System.in);
         System.out.println("Please enter the student id:");
@@ -948,10 +877,6 @@ public class cli { //Based on working with text files
     //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
     public static void teacherAddAssignment(Teacher teacher) {
-
-        System.out.print("\033[H\033[2J");
-        System.out.flush();
-
         //In this method, the professor can add an assignment to the course
         Scanner scanner = new Scanner(System.in);
         System.out.println("Please enter the assignment name:");
@@ -1009,10 +934,6 @@ public class cli { //Based on working with text files
     //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
     public static void teacherRemoveAssignment(Teacher teacher) throws IOException {
-
-        System.out.print("\033[H\033[2J");
-        System.out.flush();
-
         // In this method, the teacher can remove an assignment from the course
         // For this purpose, we only change "active" to "active: false" in the files
         Scanner scanner = new Scanner(System.in);
@@ -1109,10 +1030,6 @@ public class cli { //Based on working with text files
     //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
     public static void teacherGradeStudent(Teacher teacher) throws IOException {
-
-        System.out.print("\033[H\033[2J");
-        System.out.flush();
-
         //In this method, the professor can give grades to the students
         Scanner scanner = new Scanner(System.in);
         System.out.println("Please enter the student id:");
@@ -1224,10 +1141,6 @@ public class cli { //Based on working with text files
     //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
     public static void studentLogin () {
-
-        System.out.print("\033[H\033[2J");
-        System.out.flush();
-
         //This is for students to enter
         System.out.println("Here is student login");
         Scanner scanner = new Scanner(System.in);
@@ -1279,10 +1192,6 @@ public class cli { //Based on working with text files
     //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
     public static void studentAfterLog(Student student) throws IOException {
-
-        //System.out.print("\033[H\033[2J");
-        //System.out.flush();
-
         //This method displays what a student can do
         /*
         Two files are created for each student who is born as an object
@@ -1328,10 +1237,6 @@ public class cli { //Based on working with text files
     //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
     public static void studentCompleteProf(Student student) throws IOException {
-
-        System.out.print("\033[H\033[2J");
-        System.out.flush();
-
         // We write this information from the student's file
         Scanner scanner = new Scanner(System.in);
         System.out.println("Please enter the full name of the student:");
@@ -1352,10 +1257,6 @@ public class cli { //Based on working with text files
     //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
     public static void studentViewProf(Student student) throws IOException {
-
-        System.out.print("\033[H\033[2J");
-        System.out.flush();
-
         // We read this information from the student's file
         String filePath = "D:\\University\\AP\\project\\project files\\students\\studentInfos\\"
                 + student.getId() + "_info.txt";
@@ -1375,10 +1276,6 @@ public class cli { //Based on working with text files
     //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
     public static void studentViewCourses(Student student) throws IOException {
-
-        System.out.print("\033[H\033[2J");
-        System.out.flush();
-
         try { // We read the courses from the student file
             File file = new File("D:\\University\\AP\\project\\project files\\students\\studentCourses\\"
                     + student.getId() + "_courses.txt");
@@ -1402,9 +1299,6 @@ public class cli { //Based on working with text files
     //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
     public static void studentViewFullCourse(Student student) throws IOException {
-
-        System.out.print("\033[H\033[2J");
-        System.out.flush();
 
         List<String> studentCourses = new ArrayList<>();
         try {
@@ -1450,10 +1344,6 @@ public class cli { //Based on working with text files
     //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
     public static void studentTakeCourse(Student student) throws IOException {
-
-        System.out.print("\033[H\033[2J");
-        System.out.flush();
-
         Scanner scanner = new Scanner(System.in);
         System.out.println("Please enter the course name to add:");
         String courseName = scanner.next();
@@ -1495,10 +1385,6 @@ public class cli { //Based on working with text files
     //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
     public static void signUp () throws IOException {
-
-        System.out.print("\033[H\033[2J");
-        System.out.flush();
-
         //This is for registration
         System.out.println("Choose the option you want");
         System.out.println("1: Sign up as a student");
@@ -1527,10 +1413,6 @@ public class cli { //Based on working with text files
     //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
     public static void adminSignIn() {
-
-        System.out.print("\033[H\033[2J");
-        System.out.flush();
-
         //We assumed that there should be only one default admin and there is no need to implement this method.
     }
 
@@ -1579,10 +1461,6 @@ public class cli { //Based on working with text files
     //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
     public static void studentSignIn() throws IOException {
-
-        System.out.print("\033[H\033[2J");
-        System.out.flush();
-
         System.out.println("Here is student sign up");
         Scanner scanner = new Scanner(System.in);
 
@@ -1626,10 +1504,6 @@ public class cli { //Based on working with text files
     //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
     public static boolean usernameValidator(long username){
-
-        System.out.print("\033[H\033[2J");
-        System.out.flush();
-
         return username >= 100000000 && username <= 999999999;
     }
     public static boolean passwordValidator(String password){
