@@ -1,3 +1,5 @@
+import java.io.BufferedReader;
+import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.*;
@@ -15,6 +17,7 @@ public class Student {
     private String specialAdjective;
     public FileWriter courseWriter;
     public FileWriter infoWriter;
+    public FileReader infoReader;
 
     //constractors:
     public Student(long id) throws IOException {
@@ -26,6 +29,14 @@ public class Student {
                 + id + "_courses.txt",true);
         this.infoWriter = new FileWriter("D:\\University\\AP\\project\\project files\\students\\studentInfos\\"
                 + id + "_info.txt",true);
+        this.infoReader = new FileReader("D:\\University\\AP\\project\\project files\\students\\studentInfos\\"
+                + id + "_info.txt");
+        BufferedReader br = new BufferedReader(infoReader);
+
+        if (! br.readLine().equals("Number of units: 0")){
+            infoWriter.write("Number of units: 0");
+            infoWriter.flush();
+        }
     }
 
 

@@ -1,11 +1,8 @@
-import javax.sound.midi.Soundbank;
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Scanner;
+import java.util.*;
+
 
 public class cli { //Based on working with text files
 
@@ -13,7 +10,7 @@ public class cli { //Based on working with text files
         System.out.println("Hello! welcome to Sbu!!");
         login();
     }
-//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     public static void login() throws IOException {
         System.out.println("Please specify your role");
         System.out.println("1: student");
@@ -192,6 +189,7 @@ public class cli { //Based on working with text files
 
                 course.studentsWriter.write("Student: " + student.getId() + "\n");
                 course.studentsWriter.flush();
+
                 System.out.println("Done");
                 adminLogin();
                 break;
@@ -781,6 +779,41 @@ public class cli { //Based on working with text files
         } catch (IOException e) {
             e.printStackTrace();
         }
+
+        try {
+            File oldFile = new File("D:\\University\\AP\\project\\project files\\students\\studentInfos\\"
+                    + studentId + "_info.txt");
+            File courseInfo = new File("D:\\University\\AP\\project\\project files\\courses\\courseInformations\\"
+                    + courseName + "_info.txt");
+            //Find the number of course units
+            String targetLinePrefix = "number of the units: ";
+            BufferedReader reader = new BufferedReader(new FileReader(courseInfo));
+            String line;
+            int x = 0;
+            while ((line = reader.readLine()) != null) {
+                if (line.startsWith(targetLinePrefix)) {
+                    String valueString = line.substring(targetLinePrefix.length()).trim();
+                    x = Integer.parseInt(valueString);
+                    break;
+                }
+            }
+            int numberToAdd = x;
+
+            BufferedReader studentReader = new BufferedReader(new FileReader(oldFile));
+            String firstLine = studentReader.readLine();
+            studentReader.close();
+
+            String[] parts = firstLine.split(": ");
+            int currentNumber = Integer.parseInt(parts[1]);
+            int newNumber = currentNumber + numberToAdd;
+            String updatedFirstLine = "Number of units: " + newNumber;
+
+            Files.write(Paths.get("D:\\University\\AP\\project\\project files\\students\\studentInfos\\"
+                    + studentId + "_info.txt"), Collections.singleton(updatedFirstLine));
+
+        } catch (IOException e){
+            e.printStackTrace();
+        }
         teacherAfterLog(teacher);
     }
 
@@ -845,6 +878,7 @@ public class cli { //Based on working with text files
                     oldFile.delete();
                     newFile.renameTo(oldFile);
 
+
                     // Replace the course file
                     oldFile = new File("D:\\University\\AP\\project\\project files\\courses\\courseStudents\\"
                             + courseName + "_students.txt");
@@ -874,7 +908,7 @@ public class cli { //Based on working with text files
         teacherAfterLog(teacher);
     }
 
-    //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
     public static void teacherAddAssignment(Teacher teacher) {
         //In this method, the professor can add an assignment to the course
@@ -1151,6 +1185,11 @@ public class cli { //Based on working with text files
 
         System.out.print("password: ");
         String password = scanner.nextLine();
+        loginChecker(username, password);
+
+    }
+
+    private static void loginChecker(String username, String password) {
         try { // This file is where students ID and password are stored
             File file = new File("D:\\University\\AP\\project\\project files\\Student info.txt");
             Scanner fileScanner = new Scanner(file);
@@ -1186,7 +1225,6 @@ public class cli { //Based on working with text files
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-
     }
 
     //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -1379,6 +1417,42 @@ public class cli { //Based on working with text files
         } catch (IOException e) {
             e.printStackTrace();
         }
+
+        try {
+            File oldFile = new File("D:\\University\\AP\\project\\project files\\students\\studentInfos\\"
+                    + student.getId() + "_info.txt");
+            File courseInfo = new File("D:\\University\\AP\\project\\project files\\courses\\courseInformations\\"
+                    + courseName + "_info.txt");
+            //Find the number of course units
+            String targetLinePrefix = "number of the units: ";
+            BufferedReader reader = new BufferedReader(new FileReader(courseInfo));
+            String line;
+            int x = 0;
+            while ((line = reader.readLine()) != null) {
+                if (line.startsWith(targetLinePrefix)) {
+                    String valueString = line.substring(targetLinePrefix.length()).trim();
+                    x = Integer.parseInt(valueString);
+                    break;
+                }
+            }
+            int numberToAdd = x;
+
+            BufferedReader studentReader = new BufferedReader(new FileReader(oldFile));
+            String firstLine = studentReader.readLine();
+            studentReader.close();
+
+            String[] parts = firstLine.split(": ");
+            int currentNumber = Integer.parseInt(parts[1]);
+            int newNumber = currentNumber + numberToAdd;
+            String updatedFirstLine = "Number of units: " + newNumber;
+
+            Files.write(Paths.get("D:\\University\\AP\\project\\project files\\students\\studentInfos\\"
+                    + student.getId() + "_info.txt"), Collections.singleton(updatedFirstLine));
+
+        } catch (IOException e){
+            e.printStackTrace();
+        }
+
         studentAfterLog(student);
     }
 
