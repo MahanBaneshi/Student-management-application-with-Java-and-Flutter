@@ -910,7 +910,7 @@ public class cli { //Based on working with text files
 
     //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-    public static void teacherAddAssignment(Teacher teacher) {
+    public static void teacherAddAssignment(Teacher teacher) throws IOException {
         //In this method, the professor can add an assignment to the course
         Scanner scanner = new Scanner(System.in);
         System.out.println("Please enter the assignment name:");
@@ -963,6 +963,7 @@ public class cli { //Based on working with text files
         } catch (IOException e) {
             e.printStackTrace();
         }
+        teacherAfterLog(teacher);
     }
 
     //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -1243,7 +1244,8 @@ public class cli { //Based on working with text files
         System.out.println("3: View courses");
         System.out.println("4: See the courses in detail (number of units and grades and teachers)");
         System.out.println("5: Taking a course");
-        System.out.println("6: Back to login page");
+        System.out.println("6: View assignments");
+        System.out.println("7: Back to login page");
         int ans = scanner.nextInt();
         switch (ans){
             case 1:
@@ -1262,6 +1264,9 @@ public class cli { //Based on working with text files
                 studentTakeCourse(student);
                 break;
             case 6:
+                viewAssignment(student);
+                break;
+            case 7:
                 login();
                 break;
             default:
@@ -1271,6 +1276,7 @@ public class cli { //Based on working with text files
         }
 
     }
+
 
     //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -1282,7 +1288,7 @@ public class cli { //Based on working with text files
 
         try {
             FileWriter writer = new FileWriter("D:\\University\\AP\\project\\project files\\students\\studentInfos\\"
-                    + student.getId() + "_info.txt");
+                    + student.getId() + "_info.txt", true);
             writer.write("Full Name: " + fullName + "\n");
             writer.close();
         } catch (IOException e) {
@@ -1301,13 +1307,38 @@ public class cli { //Based on working with text files
         try {
             File file = new File(filePath);
             Scanner reader = new Scanner(file);
-            String fullName = reader.nextLine().split(": ")[1];
-            System.out.println("Full Name: " + fullName);
-            System.out.println("ID: " + student.getId());
+            while (reader.hasNextLine()) {
+                String line = reader.nextLine();
+                System.out.println(line);
+            }
             reader.close();
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
+
+
+        BufferedReader reader2 = new BufferedReader(new FileReader(
+                "D:\\University\\AP\\project\\project files\\students\\studentCourses\\"
+                + student.getId()+ "_courses.txt"));
+        String line;
+        double totalGrade = 0.0;
+        int courseCount = 0;
+
+        while ((line = reader2.readLine()) != null) {
+            if (line.contains("grade:")) {
+                String gradeString = line.split("grade: ")[1].trim();
+                double grade = Double.parseDouble(gradeString);
+                totalGrade += grade;
+                courseCount++;
+            }
+        }
+        reader2.close();
+        double averageGrade = 0;
+        if (courseCount > 0) {
+            averageGrade = totalGrade / courseCount;
+        }
+        System.out.println(averageGrade);
+        reader2.close();
         studentAfterLog(student);
     }
 
@@ -1357,8 +1388,7 @@ public class cli { //Based on working with text files
             e.printStackTrace();
         }
           System.out.println("Your courses: " + studentCourses);
-//        studentCourses.removeIf("grade"::equals);
-//        System.out.println(studentCourses);
+
 
         String courseInfosPath = "D:\\University\\AP\\project\\project files\\courses\\courseInformations\\";
         for (String course : studentCourses) {
@@ -1418,7 +1448,7 @@ public class cli { //Based on working with text files
             e.printStackTrace();
         }
 
-        try {
+        try { //Add the number of course units ti the number of student units
             File oldFile = new File("D:\\University\\AP\\project\\project files\\students\\studentInfos\\"
                     + student.getId() + "_info.txt");
             File courseInfo = new File("D:\\University\\AP\\project\\project files\\courses\\courseInformations\\"
@@ -1456,6 +1486,36 @@ public class cli { //Based on working with text files
         studentAfterLog(student);
     }
 
+    public static void viewAssignment(Student student) throws IOException {
+        String studentCoursesFilePath = "D:\\University\\AP\\project\\project files\\students\\studentCourses\\"
+                + student.getId() + "_courses.txt";
+        String courseInformationsPath = "D:\\University\\AP\\project\\project files\\courses\\courseInformations\\";
+
+        try {
+            BufferedReader studentCoursesReader = new BufferedReader(new FileReader(studentCoursesFilePath));
+            String line;
+            while ((line = studentCoursesReader.readLine()) != null) {
+                String[] parts = line.split(",");
+                String courseName = parts[0].substring(8).trim();
+
+                String assignmentFilePath = courseInformationsPath + courseName + "_info.txt";
+                BufferedReader assignmentReader = new BufferedReader(new FileReader(assignmentFilePath));
+                String assignmentLine;
+                while ((assignmentLine = assignmentReader.readLine()) != null) {
+                    if (assignmentLine.contains("Assignment")) {
+                        System.out.println("Course: " + courseName);
+                        System.out.println(assignmentLine);
+                    }
+                }
+                assignmentReader.close();
+            }
+            studentCoursesReader.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        studentAfterLog(student);
+    }
+
     //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
     public static void signUp () throws IOException {
@@ -1487,6 +1547,7 @@ public class cli { //Based on working with text files
     //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
     public static void adminSignIn() {
+        System.out.println("Admins can't sign in");
         //We assumed that there should be only one default admin and there is no need to implement this method.
     }
 

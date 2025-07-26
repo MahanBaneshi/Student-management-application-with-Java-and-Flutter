@@ -33,8 +33,8 @@ public class Student {
                 + id + "_info.txt");
         BufferedReader br = new BufferedReader(infoReader);
 
-        if (! br.readLine().equals("Number of units: 0")){
-            infoWriter.write("Number of units: 0");
+        if (br.readLine() == null){
+            infoWriter.write("Number of units: 0\n");
             infoWriter.flush();
         }
     }
